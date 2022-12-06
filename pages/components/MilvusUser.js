@@ -7,22 +7,31 @@ import { apiKey} from '../../config';
 import SearchIcon from "@material-ui/icons/Search";
 import * as dbAPI from "../api/api";
 import ResultDisplay from "./ResultDisplay";
-
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
 
 export default function MilvusUser() {
 
   const [userId, setUserId] = useState('')
   const [results, setResults] = useState([])
+  const [searching, setSearching] = useState(false)
+  const [runtime, setRuntime] = useState(-1)
 
   const enterUserId = (event) => {
     setUserId(event.target.value)
   }
 
   const search = () => {
-    dbAPI.searchSimilarUsers("milvus", userId)
+    setSearching(true)
+    dbAPI.searchRecommendedMovies("milvus", userId)
         .then((res) => {
-          setResults(res.data)
-        })
+          setSearching(false)
+          setResults(res.data["movies"])
+          setRuntime(Math.round(res.data["runtime"] * 100) / 100)
+        }).catch(err => {
+        setSearching(false)
+        console.log(err)
+    })
   }
 
 
@@ -34,7 +43,8 @@ export default function MilvusUser() {
         <TextField
           className={movieStyles.search}
           onChange={enterUserId}
-          placeholder='Similar Users (Milvus)'
+          fullWidth
+          placeholder='Recommended Movies (Milvus)'
           type="text"
           value={userId}
           variant="outlined"
@@ -47,13 +57,20 @@ export default function MilvusUser() {
           }}
         />
         <IconButton aria-label="search" onClick={search}>
-          <SearchIcon />
+            {
+                searching?  <CircularProgress /> : <SearchIcon />
+            }
         </IconButton>
         </div>
 
-        {results.length > 0 && (
-            <ResultDisplay results={results}/>
-        )}
+
+        {results.length > 0 &&
+            ( <Alert severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
+        }
+        {results.length > 0 &&
+            (<ResultDisplay results={results}/>)
+
+        }
         {/* {temp.length > 0 && (
             <MovieDisplay {...{...temp}}/>  
         )} */}

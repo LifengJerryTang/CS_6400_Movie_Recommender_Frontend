@@ -6,22 +6,32 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import * as dbAPI from "../api/api";
 import SearchIcon from "@material-ui/icons/Search";
 import ResultDisplay from "./ResultDisplay";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 
 
 export default function MySQL() {
 
   const [movieName, setMovieName] = useState('')
   const [results, setResults] = useState([])
+  const [searching, setSearching] = useState(false)
+  const [runtime, setRuntime] = useState(-1)
 
   const enterMovieName = (event) => {
     setMovieName(event.target.value)
   }
 
   const search = () => {
+    setSearching(true)
     dbAPI.searchSimilarMovies("mysql", movieName)
         .then((res) => {
-          setResults(res.data)
-        })
+            setSearching(false)
+            setResults(res.data["movies"])
+            setRuntime(Math.round(res.data["runtime"] * 100) / 100)
+        }).catch(err => {
+        setSearching(false)
+        console.log(err)
+    })
   }
 
   return (
@@ -34,6 +44,7 @@ export default function MySQL() {
           onChange={enterMovieName}
           placeholder='Similar Movies (MySQL)'
           type="text"
+          fullWidth
           value={movieName}
           variant="outlined"
           InputProps={{
@@ -44,17 +55,21 @@ export default function MySQL() {
             )
           }}
         />
-        <IconButton aria-label="search" onClick={search}>
-          <SearchIcon />
-        </IconButton>
+          <IconButton aria-label="search" onClick={search}>
+              {
+                  searching?  <CircularProgress /> : <SearchIcon />
+              }
+          </IconButton>
         </div>
 
-        {results.length > 0 && (
-            <ResultDisplay results={results}/>
-        )}
-        {/* {temp.length > 0 && (
-            <MovieDisplay {...{...temp}}/>  
-        )} */}
+        {results.length > 0 &&
+            ( <Alert severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
+        }
+
+        {results.length > 0 &&
+            (<ResultDisplay results={results}/>)
+
+        }
 
     </>
     

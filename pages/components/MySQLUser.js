@@ -7,21 +7,31 @@ import ResultDisplay from './ResultDisplay';
 import { apiKey} from '../../config';
 import * as dbAPI from "../api/api";
 import SearchIcon from "@material-ui/icons/Search";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Alert from "@material-ui/lab/Alert";
 
 
 export default function MySQLUser() {
   const [userId, setUserId] = useState('')
   const [results, setResults] = useState([])
+  const [searching, setSearching] = useState(false)
+  const [runtime, setRuntime] = useState(-1)
 
   const enterUserId = (event) => {
     setUserId(event.target.value)
   }
 
   const search = () => {
-    dbAPI.searchSimilarUsers("mysql", userId)
+    setSearching(true)
+    dbAPI.searchRecommendedMovies("mysql", userId)
         .then((res) => {
-          setResults(res.data)
-        })
+            setSearching(false)
+            setResults(res.data["movies"])
+            setRuntime(Math.round(res.data["runtime"] * 100) / 100)
+        }).catch(err => {
+        setSearching(false)
+        console.log(err)
+    })
   }
 
   return (
@@ -32,8 +42,9 @@ export default function MySQLUser() {
         <TextField
           className={movieStyles.search}
           onChange={enterUserId}
-          placeholder='Similar Movie By User (MySQL)'
+          placeholder='Recommended Movies (MySQL)'
           type="text"
+          fullWidth
           value={userId}
           variant="outlined"
           InputProps={{
@@ -45,17 +56,22 @@ export default function MySQLUser() {
           }}
         />
         <IconButton aria-label="search" onClick={search}>
-          <SearchIcon />
+            <IconButton aria-label="search" onClick={search}>
+                {
+                    searching?  <CircularProgress /> : <SearchIcon />
+                }
+            </IconButton>
         </IconButton>
         </div>
 
-        {results.length > 0 && (
-            <ResultDisplay results={results}/>
-        )}
-        {/* {temp.length > 0 && (
-            <MovieDisplay {...{...temp}}/>  
-        )} */}
 
+        {results.length > 0 &&
+            ( <Alert severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
+        }
+        {results.length > 0 &&
+            (<ResultDisplay results={results}/>)
+
+        }
     </>
     
   )

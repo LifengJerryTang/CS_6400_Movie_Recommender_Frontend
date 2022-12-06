@@ -7,6 +7,7 @@ import TheatersIcon from '@material-ui/icons/Theaters';
 import * as dbAPI from "../api/api";
 import ResultDisplay from "./ResultDisplay";
 import CircularProgress from '@material-ui/core/CircularProgress';
+import Alert from '@material-ui/lab/Alert';
 
 
 export default function Milvus() {
@@ -14,6 +15,7 @@ export default function Milvus() {
   const [movieName, setMovieName] = useState('')
   const [results, setResults] = useState([])
   const [searching, setSearching] = useState(false)
+  const [runtime, setRuntime] = useState(-1)
   
   const enterMovieName = (event) => {
     setMovieName(event.target.value)
@@ -25,8 +27,12 @@ export default function Milvus() {
     dbAPI.searchSimilarMovies("milvus", movieName)
         .then((res) => {
             setSearching(false)
-           setResults(res.data)
-        })
+            setResults(res.data["movies"])
+            setRuntime(Math.round(res.data["runtime"] * 100) / 100)
+        }).catch(err => {
+        setSearching(false)
+        console.log(err)
+    })
   }
 
   return (
@@ -40,6 +46,7 @@ export default function Milvus() {
           // onFocus={onFocus}
           placeholder='Similar Movies (Milvus)'
           type="text"
+          fullWidth
           value={movieName}
           variant="outlined"
           InputProps={{
@@ -58,12 +65,14 @@ export default function Milvus() {
             </IconButton>
         </div>
 
-        {results.length > 0 && (
-            <ResultDisplay results={results}/>
-        )}
-        {/* {temp.length > 0 && (
-            <MovieDisplay {...{...temp}}/>  
-        )} */}
+        {results.length > 0 &&
+            ( <Alert severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
+        }
+
+        {results.length > 0 &&
+            (<ResultDisplay results={results}/>)
+
+        }
 
     </>
     
