@@ -15,6 +15,11 @@
   width: 400px
 }
 
+.alert {
+  margin: 5px;
+  width: 400px
+}
+
 .results {
   list-style: none;
   overflow: hidden;
@@ -38,6 +43,7 @@
 }
 
 .display {
-  padding: 18px;
+  padding-top: 18px;
+  margin-left: 5px;
   width: 400px
 }

@@ -83,7 +83,7 @@ export default function MySQLUser() {
 
 
         {results.length > 0 &&
-            ( <Alert severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
+            (  <Alert className={movieStyles.alert} severity="success">SUCCESS! Runtime: {runtime} seconds</Alert>)
         }
         {results.length > 0 &&
             (<ResultDisplay results={results}/>)
