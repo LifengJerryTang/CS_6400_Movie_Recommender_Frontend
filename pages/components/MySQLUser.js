@@ -31,8 +31,16 @@ export default function MySQLUser() {
 
             for (let movieData of res.data["movies"]) {
                 let movieName = movieData["name"]
-                searchResult.push(movieName)
+                let movieGenres = movieData["genres"].join(", ")
+                let movieCasts = movieData["casts"].join(", ")
+                let movieKeywords = movieData["keywords"].join(", ")
 
+                searchResult.push({
+                    movieName,
+                    movieGenres,
+                    movieCasts,
+                    movieKeywords
+                })
             }
 
             setResults(searchResult)
@@ -54,7 +62,6 @@ export default function MySQLUser() {
           onChange={enterUserId}
           placeholder='Recommended Movies (MySQL)'
           type="text"
-          fullWidth
           value={userId}
           variant="outlined"
           InputProps={{

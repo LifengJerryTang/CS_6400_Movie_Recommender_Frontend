@@ -30,7 +30,16 @@ export default function MilvusUser() {
 
             for (let movieData of res.data["movies"]) {
                 let movieName = movieData["name"]
-                searchResult.push(movieName)
+                let movieGenres = movieData["genres"].join(", ")
+                let movieCasts = movieData["casts"].join(", ")
+                let movieKeywords = movieData["keywords"].join(", ")
+
+                searchResult.push({
+                    movieName,
+                    movieGenres,
+                    movieCasts,
+                    movieKeywords
+                })
             }
 
             setResults(searchResult)
@@ -50,7 +59,6 @@ export default function MilvusUser() {
         <TextField
           className={movieStyles.search}
           onChange={enterUserId}
-          fullWidth
           placeholder='Recommended Movies (Milvus)'
           type="text"
           value={userId}

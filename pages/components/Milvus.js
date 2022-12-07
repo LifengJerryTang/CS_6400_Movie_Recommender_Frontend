@@ -31,7 +31,16 @@ export default function Milvus() {
 
             for (let movieData of res.data["movies"]) {
                 let movieName = movieData["name"]
-                searchResult.push(movieName)
+                let movieGenres = movieData["genres"].join(", ")
+                let movieCasts = movieData["casts"].join(", ")
+                let movieKeywords = movieData["keywords"].join(", ")
+
+                searchResult.push({
+                    movieName,
+                    movieGenres,
+                    movieCasts,
+                    movieKeywords
+                })
             }
 
             setResults(searchResult)
@@ -53,7 +62,6 @@ export default function Milvus() {
           // onFocus={onFocus}
           placeholder='Similar Movies (Milvus)'
           type="text"
-          fullWidth
           value={movieName}
           variant="outlined"
           InputProps={{

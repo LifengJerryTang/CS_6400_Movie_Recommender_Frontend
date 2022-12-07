@@ -12,7 +12,7 @@
   box-sizing: border-box;
   font-size: 18px;
   padding: 18px;
-  width: 100%;
+  width: 400px
 }
 
 .results {
@@ -39,4 +39,5 @@
 
 .display {
   padding: 18px;
+  width: 400px
 }

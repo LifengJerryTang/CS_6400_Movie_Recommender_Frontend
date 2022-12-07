@@ -31,7 +31,16 @@ export default function MySQL() {
 
             for (let movieData of res.data["movies"]) {
                 let movieName = movieData["name"]
-                searchResult.push(movieName)
+                let movieGenres = movieData["genres"].join(", ")
+                let movieCasts = movieData["casts"].join(", ")
+                let movieKeywords = movieData["keywords"].join(", ")
+
+                searchResult.push({
+                    movieName,
+                    movieGenres,
+                    movieCasts,
+                    movieKeywords
+                })
             }
 
             setResults(searchResult)
@@ -52,7 +61,6 @@ export default function MySQL() {
           onChange={enterMovieName}
           placeholder='Similar Movies (MySQL)'
           type="text"
-          fullWidth
           value={movieName}
           variant="outlined"
           InputProps={{

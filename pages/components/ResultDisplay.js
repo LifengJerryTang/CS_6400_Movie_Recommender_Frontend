@@ -7,6 +7,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MovieIcon from '@material-ui/icons/Movie';
+import {Grid} from "@material-ui/core";
 
 export default function ResultDisplay(props) {
 
@@ -28,8 +29,24 @@ export default function ResultDisplay(props) {
                               aria-controls="panel1a-content"
                               id="panel1a-header"
                           >
-                              <Typography>{d}</Typography>
+                              <Typography><strong>{d.movieName}</strong></Typography>
                           </AccordionSummary>
+                          <AccordionDetails>
+                              <Grid container irection="column" spacing={2}>
+                                  <Grid item xs={12}>
+                                      <Typography display="block"><strong>Name</strong>: {d.movieName}</Typography>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                      <Typography display="block"><strong>Genres</strong>: {d.movieGenres}</Typography>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                      <Typography display="block"><strong>Casts</strong>: {d.movieCasts}</Typography>
+                                  </Grid>
+                                  <Grid item xs={12}>
+                                      <Typography display="block"><strong>Keywords</strong>: {d.movieKeywords}</Typography>
+                                  </Grid>
+                              </Grid>
+                          </AccordionDetails>
                       </Accordion>
                   })
               }
