@@ -27,7 +27,14 @@ export default function Milvus() {
     dbAPI.searchSimilarMovies("milvus", movieName)
         .then((res) => {
             setSearching(false)
-            setResults(res.data["movies"])
+            let searchResult = []
+
+            for (let movieData of res.data["movies"]) {
+                let movieName = movieData["name"]
+                searchResult.push(movieName)
+            }
+
+            setResults(searchResult)
             setRuntime(Math.round(res.data["runtime"] * 100) / 100)
         }).catch(err => {
         setSearching(false)

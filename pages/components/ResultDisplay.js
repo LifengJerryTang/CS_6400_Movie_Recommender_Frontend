@@ -1,10 +1,12 @@
 import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import movieStyles from '../movies.module.css';
 import {useEffect, useState} from "react";
-
+import Accordion from '@material-ui/core/Accordion';
+import AccordionSummary from '@material-ui/core/AccordionSummary';
+import AccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import MovieIcon from '@material-ui/icons/Movie';
 
 export default function ResultDisplay(props) {
 
@@ -20,9 +22,15 @@ export default function ResultDisplay(props) {
           <List>
               {
                   data.map((d) => {
-                      return <ListItem button>
-                                <ListItemText primary={`${d}`}/>
-                            </ListItem>
+                      return   <Accordion>
+                          <AccordionSummary
+                              expandIcon={<MovieIcon />}
+                              aria-controls="panel1a-content"
+                              id="panel1a-header"
+                          >
+                              <Typography>{d}</Typography>
+                          </AccordionSummary>
+                      </Accordion>
                   })
               }
           </List>
